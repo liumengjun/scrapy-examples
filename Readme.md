@@ -15,3 +15,5 @@ Click [here](https://doc.scrapy.org/en/latest/intro/overview.html) see more.
 *run spider in project:*
 - scrapy crawl quotes
 - scrapy crawl quotes -o quotes.jl
+- scrapy crawl quotes -o quotes-humor.jl -a tag=humor
+
