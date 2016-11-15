@@ -1,0 +1,27 @@
+<h2>Scrapy Example</h2>
+<p>Click <a href="https://doc.scrapy.org/en/latest/intro/overview.html">here</a> see more.</p>
+<h3>run spider:</h3>
+<ul>
+<li>scrapy runspider quotes_spider.py</li>
+<li>scrapy runspider quotes_spider.py -o quotes.jl</li>
+</ul>
+<p><strong><em>interactive model:</em></strong></p>
+<ul>
+<li>scrapy shell 'http://quotes.toscrape.com/page/1/'</li>
+</ul>
+<h3>startproject:</h3>
+<ul>
+<li>scrapy startproject tutorial</li>
+</ul>
+<p><strong><em>run spider in project:</em></strong></p>
+<ul>
+<li>scrapy crawl quotes</li>
+<li>scrapy crawl quotes -o quotes.jl</li>
+<li>scrapy crawl quotes -o quotes-humor.jl -a tag=humor</li>
+</ul>
+<h3>Projects</h3>
+<ul>
+<li><code>tutorial</code> Demo <a href="https://doc.scrapy.org/en/latest/intro/tutorial.html">@doc.scrapy.org</a></li>
+<li><code>questions</code> Scrapy one whole web site and certain tag, may with authentication</li>
+</ul>
+
