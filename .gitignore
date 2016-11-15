@@ -15,3 +15,7 @@ htmlcov/
 
 # Windows
 Thumbs.db
+
+# scrapy result
+*.html
+*.jl
