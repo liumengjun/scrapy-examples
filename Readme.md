@@ -1,18 +1,18 @@
-Scrapy Example
+## Scrapy Example
 
 Click [here](https://doc.scrapy.org/en/latest/intro/overview.html) see more.
 
-**run spider:**
+### **run spider:**
 - scrapy runspider quotes_spider.py
-- scrapy runspider quotes_spider.py -o quotes.json
+- scrapy runspider quotes_spider.py -o quotes.jl
 
-*interactive model:*
+***interactive model:***
 - scrapy shell 'http://quotes.toscrape.com/page/1/'
 
-**startproject:**
+### **startproject:**
 - scrapy startproject tutorial
 
-*run spider in project:*
+***run spider in project:***
 - scrapy crawl quotes
 - scrapy crawl quotes -o quotes.jl
 - scrapy crawl quotes -o quotes-humor.jl -a tag=humor
