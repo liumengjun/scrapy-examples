@@ -16,6 +16,9 @@ htmlcov/
 # Windows
 Thumbs.db
 
+# scrapy project
+local_settings.py
+
 # scrapy result
 *.html
 *.jl
