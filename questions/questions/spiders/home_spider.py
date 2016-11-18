@@ -14,6 +14,8 @@ class HomeSpider(scrapy.Spider):
     login_url = None
     home_url = None
 
+    visit_urls = set()
+
     def __init__(self, h=None, u=None, p=None, *args, **kwargs):
         super(HomeSpider, self).__init__(*args, **kwargs)
         self.host = h or settings.HOST
@@ -90,4 +92,5 @@ class HomeSpider(scrapy.Spider):
                              headers=settings.HEADERS, cookies=self.cookie_store)
 
     def visit_pages(self, response):
+        self.visit_urls.add(response.url)
         self.write_response_to_file(response)
