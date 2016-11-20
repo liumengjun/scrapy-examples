@@ -89,6 +89,23 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
+
+# NOTE: custom your own settings in local_settings.py, with following parameters
+PROTOCOL = 'http'
+HOST = "localhost.local"
+LOGIN_PATH = "/login"
+HOME_PATH = "/home"
+HEADERS = {
+    'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14",
+    'Content-Type': "text/html; charset=UTF-8",
+}
+USERNAME = None
+PASSWORD = None
+LOGIN_KEYS_IN_COOKIE = (
+    'csrftoken',
+)
+
+
 try:
     from .local_settings import *
 except:
