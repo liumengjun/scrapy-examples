@@ -16,6 +16,8 @@ class HomeSpider(scrapy.Spider):
     home_url = None
 
     visited_urls = set()
+    visited_item_ids = set()
+
     _re_deny_paths = []
 
     def __init__(self, h=None, u=None, p=None, *args, **kwargs):
@@ -45,6 +47,7 @@ class HomeSpider(scrapy.Spider):
         if not self.host or not self.username or not self.password:
             print("Parameters Error!")
             return None
+        self.visited_urls.add(self.host_url)
         yield scrapy.Request(self.host_url, self.parse, headers=settings.HEADERS)
 
     def resolve_response_cookies(self, response):
@@ -93,12 +96,18 @@ class HomeSpider(scrapy.Spider):
 
         self.write_response_to_file(response)
 
+        self.visited_urls.add(self.home_url)
         yield scrapy.Request(self.home_url, self.visit_pages,
                              headers=settings.HEADERS, cookies=self.cookie_store)
 
     def visit_pages(self, response):
         self.visited_urls.add(response.url)
         self.write_response_to_file(response)
+
+        if response.status >= 400:
+            return
+        if not hasattr(response, 'selector'):
+            return
 
         links = response.css('a[href]::attr(href)').extract()
         for href in links:
@@ -118,6 +127,7 @@ class HomeSpider(scrapy.Spider):
             if next_url in self.visited_urls:
                 continue
             # visit it
+            self.visited_urls.add(next_url)
             yield scrapy.Request(next_url, self.visit_pages,
                                  headers=settings.HEADERS, cookies=self.cookie_store)
 
