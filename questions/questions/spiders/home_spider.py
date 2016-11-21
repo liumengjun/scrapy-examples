@@ -56,8 +56,9 @@ class HomeSpider(scrapy.Spider):
         return cookies
 
     def write_response_to_file(self, response, page_name=''):
-        page = response.url.split("/")[-2] or page_name
-        filename = 'questions-%s.html' % page
+        segs = response.url.split("/")
+        page = page_name or segs[-1] or segs[-2]
+        filename = 'page-%s.html' % page
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log('Saved file %s' % filename)
