@@ -160,3 +160,4 @@ class HomeSpider(scrapy.Spider):
 
     def closed(self, reason):
         print("Count of visited pages: %s", len(self.visited_urls))
+        print("Count of visited tags: %s", len(self.visited_tag_ids))
