@@ -106,7 +106,8 @@ LOGIN_KEYS_IN_COOKIE = (
     # ('c_key', 'p_name', lambda x: x[1:-1]),  # not implemented
 )
 DENY_PATHS = (
-    '/do/not/crawl/path',
+    r'/do/not/crawl/path',
+    r'.*\.action',
 )
 CRAWL_TAG_NAME = 'video'
 OUTPUT_DIR = 'output'
@@ -116,3 +117,4 @@ try:
     from .local_settings import *
 except:
     pass
+
