@@ -109,6 +109,7 @@ DENY_PATHS = (
     '/do/not/crawl/path',
 )
 CRAWL_TAG_NAME = 'video'
+OUTPUT_DIR = 'output'
 
 
 try:

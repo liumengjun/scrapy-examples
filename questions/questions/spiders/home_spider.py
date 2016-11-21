@@ -1,3 +1,4 @@
+import os
 import re
 import scrapy
 
@@ -15,6 +16,8 @@ class HomeSpider(scrapy.Spider):
     login_url = None
     home_url = None
 
+    output_dir = ''
+
     visited_urls = set()
     visited_tag_ids = set()
 
@@ -30,6 +33,12 @@ class HomeSpider(scrapy.Spider):
         self.home_url = self.host_url + settings.HOME_PATH
         for rs in settings.DENY_PATHS:
             self._re_deny_paths.append(re.compile(rs))
+        if settings.OUTPUT_DIR and self.username:
+            self.output_dir = '%s/%s/' % (settings.OUTPUT_DIR, self.username)
+        elif settings.OUTPUT_DIR:
+            self.output_dir = '%s/' % settings.OUTPUT_DIR
+        if self.output_dir:
+            os.makedirs(self.output_dir, exist_ok=True)
 
     def set_cookie_store(self, cookies):
         self.cookie_store = cookies
@@ -65,13 +74,13 @@ class HomeSpider(scrapy.Spider):
     def write_response_to_file(self, response, page_name=''):
         segs = response.url.split("/")
         page = page_name or segs[-1] or segs[-2]
-        filename = 'page-%s.html' % page
+        filename = self.output_dir + 'page-%s.html' % page
         with open(filename, 'wb') as f:
             f.write(response.body)
         self.log('Saved file %s' % filename)
 
-    def write_tag_to_file(self, text: str, tag_file: str):
-        filename = '%s.html' % tag_file
+    def write_tag_to_file(self, text: str, tag, tag_id):
+        filename = self.output_dir + '%s-%s.html' % (tag, tag_id)
         with open(filename, 'wb') as f:
             f.write(text.encode())
         self.log('Saved tag file %s' % filename)
@@ -125,7 +134,7 @@ class HomeSpider(scrapy.Spider):
             # process this tag
             self.visited_tag_ids.add(tag_id)
             text = tag.extract()
-            self.write_tag_to_file(text, '%s-%s.html' % (tag.root.tag, tag_id))
+            self.write_tag_to_file(text, tag.root.tag, tag_id)
 
         links = response.css('a[href]::attr(href)').extract()
         for href in links:
