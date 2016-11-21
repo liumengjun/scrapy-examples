@@ -108,6 +108,7 @@ LOGIN_KEYS_IN_COOKIE = (
 DENY_PATHS = (
     '/do/not/crawl/path',
 )
+CRAWL_TAG_NAME = 'video'
 
 
 try:

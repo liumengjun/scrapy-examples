@@ -16,7 +16,7 @@ class HomeSpider(scrapy.Spider):
     home_url = None
 
     visited_urls = set()
-    visited_item_ids = set()
+    visited_tag_ids = set()
 
     _re_deny_paths = []
 
@@ -70,6 +70,12 @@ class HomeSpider(scrapy.Spider):
             f.write(response.body)
         self.log('Saved file %s' % filename)
 
+    def write_tag_to_file(self, text: str, tag_file: str):
+        filename = '%s.html' % tag_file
+        with open(filename, 'wb') as f:
+            f.write(text.encode())
+        self.log('Saved tag file %s' % filename)
+
     def parse(self, response: scrapy.http.Response):
         # print(response.url)
         # print(response.status)
@@ -108,6 +114,18 @@ class HomeSpider(scrapy.Spider):
             return
         if not hasattr(response, 'selector'):
             return
+
+        tags = response.css(settings.CRAWL_TAG_NAME)
+        for tag in tags:
+            tag_id = tag.xpath('@id').extract_first()
+            if not tag_id:
+                continue
+            if tag_id in self.visited_tag_ids:
+                continue
+            # process this tag
+            self.visited_tag_ids.add(tag_id)
+            text = tag.extract()
+            self.write_tag_to_file(text, '%s-%s.html' % (tag.root.tag, tag_id))
 
         links = response.css('a[href]::attr(href)').extract()
         for href in links:
