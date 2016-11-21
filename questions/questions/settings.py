@@ -103,6 +103,10 @@ USERNAME = None
 PASSWORD = None
 LOGIN_KEYS_IN_COOKIE = (
     'csrftoken',
+    # ('c_key', 'p_name', lambda x: x[1:-1]),  # not implemented
+)
+DENY_PATHS = (
+    '/do/not/crawl/path',
 )
 
 

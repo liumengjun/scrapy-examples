@@ -1,3 +1,4 @@
+import re
 import scrapy
 
 from .. import settings
@@ -14,7 +15,8 @@ class HomeSpider(scrapy.Spider):
     login_url = None
     home_url = None
 
-    visit_urls = set()
+    visited_urls = set()
+    _re_deny_paths = []
 
     def __init__(self, h=None, u=None, p=None, *args, **kwargs):
         super(HomeSpider, self).__init__(*args, **kwargs)
@@ -24,6 +26,8 @@ class HomeSpider(scrapy.Spider):
         self.host_url = '%s://%s' % (settings.PROTOCOL, self.host)
         self.login_url = self.host_url + settings.LOGIN_PATH
         self.home_url = self.host_url + settings.HOME_PATH
+        for rs in settings.DENY_PATHS:
+            self._re_deny_paths.append(re.compile(rs))
 
     def set_cookie_store(self, cookies):
         self.cookie_store = cookies
@@ -93,5 +97,29 @@ class HomeSpider(scrapy.Spider):
                              headers=settings.HEADERS, cookies=self.cookie_store)
 
     def visit_pages(self, response):
-        self.visit_urls.add(response.url)
+        self.visited_urls.add(response.url)
         self.write_response_to_file(response)
+
+        links = response.css('a[href]::attr(href)').extract()
+        for href in links:
+            # default filter
+            if not href or href == '/' or href.startswith('http') or href.endswith(settings.HOME_PATH):
+                continue
+            # check deny paths' settings
+            deny = False
+            for ro in self._re_deny_paths:
+                if ro.match(href):
+                    deny = True
+                    break
+            if deny:
+                continue
+            # check if has visited or not
+            next_url = response.urljoin(href)
+            if next_url in self.visited_urls:
+                continue
+            # visit it
+            yield scrapy.Request(next_url, self.visit_pages,
+                                 headers=settings.HEADERS, cookies=self.cookie_store)
+
+    def closed(self, reason):
+        print("Count of visited pages: %s", len(self.visited_urls))
