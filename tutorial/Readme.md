@@ -5,3 +5,4 @@
 - ``scrapy crawl author``
 - ``scrapy crawl quotes``
 
+See more [@doc.scrapy.org](https://doc.scrapy.org/en/latest/intro/tutorial.html).

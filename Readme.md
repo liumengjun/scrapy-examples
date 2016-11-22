@@ -1,6 +1,6 @@
 ## Scrapy Example
 
-Click [here](https://doc.scrapy.org/en/latest/intro/overview.html) see more.
+See more at [doc.scrapy.org](https://doc.scrapy.org/).
 
 ### run spider:
 - scrapy runspider quotes_spider.py
