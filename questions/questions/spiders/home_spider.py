@@ -95,7 +95,8 @@ class HomeSpider(scrapy.Spider):
 
         self.write_response_to_file(response)
 
-        params = {'email': self.username, 'password': self.password, 'remeber': "0", 'next_url': ""}
+        params = {settings.USERNAME_ALIAS: self.username, settings.PASSWORD_ALIAS: self.password}
+        params.update(settings.DEFAULT_LOGIN_PARAMS)
         for key in settings.LOGIN_KEYS_IN_COOKIE:
             params[key] = cookies.get(key, '')
         yield scrapy.FormRequest(self.login_url, self.after_login, formdata=params,
