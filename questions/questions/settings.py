@@ -97,7 +97,7 @@ LOGIN_PATH = "/login"
 HOME_PATH = "/home"
 HEADERS = {
     'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14",
-    'Content-Type': "text/html; charset=UTF-8",
+    'Content-Type': "text/html; charset=UTF-8",  # WARNING: maybe when login, Content-Type is application/x-www-form-urlencoded; charset=UTF-8
 }
 USERNAME = None
 PASSWORD = None
