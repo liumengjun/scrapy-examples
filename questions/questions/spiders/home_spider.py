@@ -49,16 +49,6 @@ class HomeSpider(scrapy.Spider):
         else:
             self.cookie_store = cookies
 
-    def start_requests(self):
-        # print(self.username)
-        # print(self.password)
-        # print(self.login_url)
-        if not self.host or not self.username or not self.password:
-            print("Parameters Error!")
-            return None
-        self.visited_urls.add(self.host_url)
-        yield scrapy.Request(self.host_url, self.parse, headers=settings.HEADERS)
-
     def resolve_response_cookies(self, response):
         cookies = {}
         for s in response.headers.getlist('Set-Cookie'):
@@ -85,16 +75,25 @@ class HomeSpider(scrapy.Spider):
             f.write(text.encode())
         self.log('Saved tag file %s' % filename)
 
+    def start_requests(self):
+        if not self.host or not self.username or not self.password:
+            print("Parameters Error!")
+            return None
+        self.visited_urls.add(self.host_url)
+        # 开始访问第一个URL
+        yield scrapy.Request(self.host_url, self.parse, headers=settings.HEADERS)
+
     def parse(self, response: scrapy.http.Response):
         # print(response.url)
-        # print(response.status)
         # print(response.headers)
+        # 解析cookies
         cookies = self.resolve_response_cookies(response)
         # print(cookies)
         self.set_cookie_store(cookies)
 
         self.write_response_to_file(response)
 
+        # 准备登录
         params = {settings.USERNAME_ALIAS: self.username, settings.PASSWORD_ALIAS: self.password}
         params.update(settings.DEFAULT_LOGIN_PARAMS)
         # some params in cookies, such as session_token
@@ -111,19 +110,23 @@ class HomeSpider(scrapy.Spider):
 
     def after_login(self, response):
         # print(response.url)
-        # print(response.status)
         # print(response.headers)
+        # 解析cookies
         cookies = self.resolve_response_cookies(response)
         # print(cookies)
         self.set_cookie_store(cookies)
 
         self.write_response_to_file(response)
 
+        # 然后访问含有具体内容页面
         self.visited_urls.add(self.home_url)
         yield scrapy.Request(self.home_url, self.visit_pages,
                              headers=settings.HEADERS, cookies=self.cookie_store)
 
     def visit_pages(self, response):
+        '''
+        递归访问该网站内容页面
+        '''
         self.visited_urls.add(response.url)
         self.write_response_to_file(response)
 
@@ -132,6 +135,7 @@ class HomeSpider(scrapy.Spider):
         if not hasattr(response, 'selector'):
             return
 
+        # 处理想要的HTML TAGS
         tags = response.css(settings.CRAWL_TAG_NAME)
         for tag in tags:
             tag_id = tag.xpath('@id').extract_first()
@@ -144,6 +148,7 @@ class HomeSpider(scrapy.Spider):
             text = tag.extract()
             self.write_tag_to_file(text, tag.root.tag, tag_id)
 
+        # 处理超链接
         links = response.css('a[href]::attr(href)').extract()
         for href in links:
             # default filter
