@@ -20,4 +20,4 @@ See more at [doc.scrapy.org](https://doc.scrapy.org/).
 
 ### Projects
 - ``tutorial`` Demo [@doc.scrapy.org](https://doc.scrapy.org/en/latest/intro/tutorial.html)
-- ``questions`` Scrapy one whole web site and certain tag, may with authentication
+- ``questions`` Scrapy one whole web site and certain html tags, may with authentication. (爬一个网站，抓取特定的html标签，支持用户登录)
