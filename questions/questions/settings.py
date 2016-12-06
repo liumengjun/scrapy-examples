@@ -104,9 +104,9 @@ PASSWORD = None
 USERNAME_ALIAS = 'username'  # param name in http methods
 PASSWORD_ALIAS = 'password'  # param name in http methods
 DEFAULT_LOGIN_PARAMS = {}
-LOGIN_KEYS_IN_COOKIE = (
+LOGIN_KEYS_IN_COOKIE = (  # some login params hidden in cookies
     'csrftoken',
-    # ('c_key', 'p_name', lambda x: x[1:-1]),  # not implemented
+    # ('c_key', 'p_name', lambda x: x[1:-1]),  # c_v = cookies.get('c_key'); {p_name: c_v or _lambda(c_v)}
 )
 DENY_PATHS = (
     r'/do/not/crawl/path',

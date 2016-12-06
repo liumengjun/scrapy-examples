@@ -97,8 +97,15 @@ class HomeSpider(scrapy.Spider):
 
         params = {settings.USERNAME_ALIAS: self.username, settings.PASSWORD_ALIAS: self.password}
         params.update(settings.DEFAULT_LOGIN_PARAMS)
+        # some params in cookies, such as session_token
         for key in settings.LOGIN_KEYS_IN_COOKIE:
-            params[key] = cookies.get(key, '')
+            if type(key) is str:
+                params[key] = cookies.get(key, '')
+            if type(key) is tuple or type(key) is list:
+                c_v = cookies.get(key[0], '')
+                p_name = key[1] if len(key) >=2 else key[0]
+                p_v = key[2](c_v) if len(key) >=3 and callable(key[2]) else c_v
+                params[p_name] = p_v
         yield scrapy.FormRequest(self.login_url, self.after_login, formdata=params,
                                  headers=settings.HEADERS, cookies=cookies)
 
