@@ -1,4 +1,4 @@
-## Scrapy Project: questions
+## Scrapy Project: webpicker
 
 Scrapy one whole web site and certain html tags, may with authentication. (爬一个网站，抓取特定的html标签，支持用户登录)
 

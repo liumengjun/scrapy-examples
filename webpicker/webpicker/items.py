@@ -8,7 +8,7 @@
 import scrapy
 
 
-class QuestionsItem(scrapy.Item):
+class WebpickerItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
