@@ -19,3 +19,6 @@ Thumbs.db
 # scrapy project
 local_settings.py
 
+# scrapy result
+outputs/
+output/
