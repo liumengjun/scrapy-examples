@@ -2,6 +2,8 @@
 
 See more at [doc.scrapy.org](https://doc.scrapy.org/).
 
+> 笔记: [谈爬虫&scrapy框架](note_on_crawler_spider.md)
+
 ### run spider:
 - scrapy runspider quotes_spider.py
 - scrapy runspider quotes_spider.py -o quotes.jl
